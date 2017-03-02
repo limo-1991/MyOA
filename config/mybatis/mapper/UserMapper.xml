@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserMapper">
+
+
+    <resultMap id="User" type="User">
+        <id column="uid" jdbcType="BIGINT" property="uid"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="sex" jdbcType="VARCHAR" property="sex"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <!--<association property="department" column="did" select="DepartmentMapper.getDepartment"/>-->
+        <!--<collection property="posts" ofType="Post" select="PostMapper.findByUid"/>-->
+    </resultMap>
+    <resultMap id="UserWithDeptAndPosts" type="User">
+        <id column="uid" jdbcType="BIGINT" property="uid"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="password" jdbcType="VARCHAR" property="password"/>
+        <result column="sex" jdbcType="VARCHAR" property="sex"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <association property="department" column="did" select="DepartmentMapper.getDepartment"/>
+        <collection property="posts" column="pid" select="PostMapper.getPostsByUid"/>
+    </resultMap>
+
+
+    <!--  插入用户信息  -->
+    <insert id="save" parameterType="User" useGeneratedKeys="true" keyProperty="uid">
+        INSERT INTO USER (
+            username,
+            password,
+            sex,
+            email,
+            phone,
+            did
+        ) VALUES (
+            #{username},
+            #{password},
+            #{sex},
+            #{phone},
+            #{email},
+            #{department.did}
+        )
+    </insert>
+
+
+    <!--  删除User信息  -->
+    <delete id="delete" parameterType="User">
+        DELETE FROM USER
+        WHERE
+            uid = #{uid}
+    </delete>
+
+
+    <!--  修改  -->
+    <update id="update" parameterType="User">
+        UPDATE
+            USER
+        SET
+            username = #{username},
+            password = #{password},
+            sex      = #{sex},
+            phone    = #{phone},
+            email    = #{email}
+        WHERE
+            uid = #{uid}
+    </update>
+
+    <!--  通过uid获取数据-->
+    <select id="getUser" parameterType="User" resultType="User">
+        SELECT
+            uid,
+            username,
+            password,
+            sex,
+            phone,
+            email
+        FROM
+            USER
+        WHERE
+            uid = #{uid}
+    </select>
+
+    <select id="getUserWithDeptAndPosts" resultMap="UserWithDeptAndPosts">
+        SELECT
+            uid,
+            username,
+            password,
+            sex,
+            phone,
+            email,
+            did
+        FROM
+            USER
+        WHERE
+            uid = #{uid}
+    </select>
+    <select id="getAllWithDeptAndPosts" resultMap="UserWithDeptAndPosts">
+        SELECT
+            uid,
+            username,
+            password,
+            sex,
+            phone,
+            email,
+            did
+        FROM
+            USER
+    </select>
+
+    <!--  获取所有用户信息  -->
+    <select id="getAll" resultMap="User">
+        SELECT
+            uid,
+            username,
+            password,
+            sex,
+            phone,
+            email
+        FROM
+            USER
+    </select>
+
+
+    <!--  通过pid获取Users  -->
+    <select id="getUsersByPid" resultMap="User">
+        SELECT
+            User.uid,
+            username,
+            password,
+            sex,
+            email,
+            phone
+        FROM USER_POST_LINK
+            LEFT JOIN USER ON USER.uid = USER_POST_LINK.uid
+        WHERE pid = #{pid}
+    </select>
+
+
+</mapper>

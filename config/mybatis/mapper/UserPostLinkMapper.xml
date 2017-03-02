@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UserPostLinkMapper">
+    <resultMap id="UserPostLink" type="UserPostLink">
+        <id property="id" column="id"/>
+        <association property="user" column="uid" select="UserMapper.getUser"/>
+        <association property="post" column="pid" select="PostMapper.getPost"/>
+    </resultMap>
+
+    <!--  保存User和Post之间的关系信息-->
+    <insert id="save" parameterType="UserPostLink" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO USER_POST_LINK (uid, pid)
+        VALUES (#{user.uid}, #{post.pid})
+    </insert>
+
+    <!--  删除User跟Post之间的关系信息-->
+    <delete id="delete" parameterType="UserPostLink">
+        DELETE FROM USER_POST_LINK
+        WHERE
+            uid = #{user.uid}
+            AND
+            pid = #{post.pid}
+
+    </delete>
+
+    <select id="isExist" parameterType="UserPostLink" resultType="long">
+        SELECT count(1)
+        FROM USER_POST_LINK
+        WHERE
+            uid = #{user.uid}
+            AND
+            pid = #{post.pid}
+    </select>
+
+
+</mapper>

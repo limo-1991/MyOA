@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DepartmentMapper">
+    <resultMap id="Department" type="Department">
+        <id column="did" jdbcType="BIGINT" property="did"/>
+        <result column="dname" jdbcType="VARCHAR" property="dname"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+    </resultMap>
+
+    <!--  新增  -->
+    <insert id="save" parameterType="Department" useGeneratedKeys="true" keyProperty="did">
+        INSERT INTO DEPARTMENT (
+            dname,
+            description
+        ) VALUES (
+            #{dname},
+            #{description}
+        )
+    </insert>
+
+    <!--  删除  -->
+    <delete id="delete" parameterType="Department">
+        DELETE FROM DEPARTMENT
+        WHERE
+            did = #{did}
+    </delete>
+
+    <!--  修改  -->
+    <update id="update" parameterType="Department">
+        UPDATE
+            DEPARTMENT
+        SET
+            dname       = #{dname},
+            description = #{description}
+        WHERE
+             did = #{did}
+    </update>
+
+    <!--  通过did获取数据-->
+    <select id="getDepartment"   resultMap="Department">
+        SELECT
+            did,
+            dname,
+            description
+        FROM
+            DEPARTMENT
+        WHERE
+            did = #{did}
+    </select>
+
+    <!--  获取所有用户信息  -->
+    <select id="getAll" resultMap="Department">
+        SELECT
+            *
+        FROM
+            DEPARTMENT
+    </select>
+
+
+</mapper>

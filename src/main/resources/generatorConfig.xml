@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!--<properties> 0或1个-->
+    <!--<properties resource="spring/jdbc.properties" url="file:///C:/myfolder/generatorConfig.properties"/>-->
+    <!--用于指定配置文件-->
+
+    <!--数据库驱动-->
+    <classPathEntry location="E:\jar\apache-commons\mysql-connector-java-5.1.7\mysql-connector-java-5.1.7-bin.jar"/>
+    <context id="MysqlContext" targetRuntime="MyBatis3" defaultModelType="flat">
+
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <!--阻止生成注释和时间戳-->
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!--&lt;!&ndash;数据库链接地址账号密码&ndash;&gt;-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://101.200.238.35:12311/myoa"
+                        userId="root" password="mo@*811li"/>
+
+        <!--<javaTypeResolver>-->
+            <!--<property name="forceBigDecimals" value="false"/>-->
+        <!--</javaTypeResolver>-->
+        <!--&lt;!&ndash;生成Model类存放位置&ndash;&gt;-->
+        <javaModelGenerator targetPackage="test.model" targetProject="src">
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+        <!--&lt;!&ndash;生成映射文件存放位置&ndash;&gt;-->
+        <sqlMapGenerator targetPackage="test.xml" targetProject="src">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!--&lt;!&ndash;生成Dao类存放位置&ndash;&gt;-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="test.dao" targetProject="src">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+        <!--生成对应表及类名-->
+       <table tableName="USER">
+           <generatedKey column="uid" sqlStatement="Mysql"/>
+       </table>
+        <table tableName="DEPARTMENT">
+            <generatedKey column="did" sqlStatement="Mysql"/>
+        </table>
+        <table tableName="POST">
+            <generatedKey column="pid" sqlStatement="Mysql"/>
+        </table>
+    </context>
+</generatorConfiguration>

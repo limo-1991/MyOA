@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PostMapper">
+
+    <resultMap id="Post" type="Post">
+        <id column="pid" jdbcType="BIGINT" property="pid"/>
+        <result column="pname" jdbcType="VARCHAR" property="pname"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+    </resultMap>
+
+    <!--  插入Post -->
+    <insert id="save" parameterType="Post" useGeneratedKeys="true" keyProperty="pid">
+        INSERT INTO POST (
+            pname,
+            description
+        ) VALUES (
+            #{pname},
+            #{description}
+        )
+    </insert>
+
+    <!--  删除Post -->
+    <delete id="delete" parameterType="Post">
+        DELETE FROM POST
+        WHERE pid = #{pid}
+    </delete>
+
+    <!--  改 -->
+    <update id="update" parameterType="Post">
+        UPDATE POST
+        SET
+            pname       = #{pname},
+            description = #{description}
+        WHERE
+            pid = #{pid}
+    </update>
+
+    <!-- 通过pid查post -->
+    <select id="getPost" resultMap="Post">
+        SELECT
+        	pid,
+            pname,
+            description
+        FROM POST
+        WHERE pid = #{pid}
+    </select>
+
+    <!--  列出所有post  -->
+    <select id="getAll" resultMap="Post">
+        SELECT
+            pid,
+            pname,
+            description
+        FROM POST
+    </select>
+
+
+    <!-- 通过uid查 posts -->
+    <select id="getPostsByUid" resultMap="Post">
+        SELECT
+            POST.pid,
+            pname,
+            description
+        FROM USER_POST_LINK
+            LEFT JOIN POST ON POST.pid = USER_POST_LINK.pid
+        WHERE uid = #{uid}
+    </select>
+
+
+</mapper>
